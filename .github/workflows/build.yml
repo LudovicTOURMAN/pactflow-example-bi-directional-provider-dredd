@@ -10,8 +10,8 @@ on:
         default: latest
 
 env:
-  PACT_BROKER_BASE_URL: https://testdemo.pactflow.io
-  PACT_BROKER_TOKEN: ${{ secrets.PACTFLOW_TOKEN_FOR_CI_CD_WORKSHOP }}
+  PACT_BROKER_BASE_URL: ${{ vars.PACT_BROKER_BASE_URL }}
+  PACT_BROKER_TOKEN: ${{ secrets.PACTFLOW_RW_TOKEN }}
   PACT_BROKER_PUBLISH_VERIFICATION_RESULTS: true
   GIT_COMMIT: ${{ github.sha }}
   GITHUB_REF: ${{ github.ref }}
@@ -26,7 +26,7 @@ jobs:
         name: 🐳 set PACT_CLI_DOCKER_VERSION to latest, if version not present
         run: |
           PACT_CLI_DOCKER_VERSION="latest"
-          echo "PACT_CLI_DOCKER_VERSION=${PACT_CLI_DOCKER_VERSION}" >> $GITHUB_ENV 
+          echo "PACT_CLI_DOCKER_VERSION=${PACT_CLI_DOCKER_VERSION}" >> $GITHUB_ENV
       - name: 🐳 PACT_CLI_DOCKER_VERSION is ${{ env.PACT_CLI_DOCKER_VERSION }}
         run: echo $PACT_CLI_DOCKER_VERSION
     outputs:
@@ -66,7 +66,7 @@ jobs:
       PACT_CLI_DOCKER_VERSION: ${{ needs.set-pact-cli-docker-version.outputs.PACT_CLI_DOCKER_VERSION}}
     steps:
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
-      - name: 🔎 Can I deploy? 
+      - name: 🔎 Can I deploy?
         run: GIT_BRANCH=${GITHUB_REF:11} make can_i_deploy
         shell: bash
 
